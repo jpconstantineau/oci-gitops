@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prod-iow-api-corr-ht-h2s-h2
+  namespace: iow
+  labels:
+    app: prod-iow-api-corr-ht-h2s-h2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prod-iow-api-corr-ht-h2s-h2
+  template:
+    metadata:
+      labels:
+        app: prod-iow-api-corr-ht-h2s-h2
+    spec:
+      containers:
+      - name: api-corr-ht-h2s-h2
+        image: ghcr.io/iow-jpto-dev/api-corr-ht-h2s-h2:main
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prod-iow-api-corr-ht-h2s-h2-service
+  namespace: iow
+spec:
+  selector:
+    app: prod-iow-api-corr-ht-h2s-h2
+  ports:
+    - protocol: TCP
+      port: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prod-iow-ingress-api-corr-ht-h2s-h2
+  namespace: iow
+  annotations:
+    hajimari.io/enable: "True"
+    hajimari.io/appName: "IOW Prod - calc"
+    hajimari.io/icon: "mdi:cloud"
+    hajimari.io/targetBlank: "True"
+    hajimari.io/group: "Production"
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt-production-nginx
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
+spec:
+  rules:
+  - host: "iow.oci1.jpto.dev"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /ht-h2s-h2/
+        backend:
+          service:
+            name: prod-iow-api-corr-ht-h2s-h2-service
+            port:
+              number: 3000        
+  tls:
+  - hosts: 
+    - iow.oci1.jpto.dev
+    secretName: iow-jpto-tls-production

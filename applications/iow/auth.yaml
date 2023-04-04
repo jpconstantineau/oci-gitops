@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prod-iow-nginx-auth
+  namespace: iow
+  labels:
+    app: prod-iow-nginx-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prod-iow-nginx-auth
+  template:
+    metadata:
+      labels:
+        app: prod-iow-nginx-auth
+    spec:
+      containers:
+      - name: nginx
+        image: ghcr.io/iow-jpto-dev/auth:main
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prod-iow-nginx-auth-service
+  namespace: iow
+spec:
+  selector:
+    app: prod-iow-nginx-auth
+  ports:
+    - protocol: TCP
+      port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prod-iow-ingress-auth
+  namespace: iow
+  annotations:
+    hajimari.io/enable: "True"
+    hajimari.io/appName: "IOW Prod - auth"
+    hajimari.io/icon: "mdi:cloud"
+    hajimari.io/targetBlank: "True"
+    hajimari.io/group: "Production"
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt-production-nginx
+spec:
+  rules:
+  - host: "iow.oci1.jpto.dev"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /auth/
+        backend:
+          service:
+            name: prod-iow-nginx-auth-service
+            port:
+              number: 80        
+  tls:
+  - hosts: 
+    - iow.oci1.jpto.dev
+    secretName: iow-jpto-tls-production

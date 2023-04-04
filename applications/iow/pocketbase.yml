@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prod-iow-pocketbase
+  namespace: iow
+  labels:
+    app: prod-iow-pocketbase
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prod-iow-pocketbase
+  template:
+    metadata:
+      labels:
+        app: prod-iow-pocketbase
+    spec:
+      containers:
+      - name: prod-iow-pocketbase
+        image:  ghcr.io/muchobien/pocketbase:0.14
+        ports:
+        - containerPort: 8090
+        volumeMounts:
+          - name: prod-iow-pocketbase-data-volume
+            mountPath: /pb_data
+          - name: prod-iow-pocketbase-public-volume
+            mountPath: /pb_public  
+      volumes:
+      - name: prod-iow-pocketbase-public-volume
+        emptyDir: {}
+      - name: prod-iow-pocketbase-data-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prod-iow-pocketbase-service
+  namespace: iow
+spec:
+  selector:
+    app: prod-iow-pocketbase
+  ports:
+    - protocol: TCP
+      port: 8090
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prod-iow-ingress
+  namespace: iow
+  annotations:
+    hajimari.io/enable: "True"
+    hajimari.io/appName: "IOW Prod"
+    hajimari.io/icon: "mdi:cloud"
+    hajimari.io/targetBlank: "True"
+    hajimari.io/group: "Production"
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt-production-nginx
+spec:
+  rules:
+  - host: "iow.oci1.jpto.dev"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /_/
+        backend:
+          service:
+            name: prod-iow-pocketbase-service
+            port:
+              number: 8090        
+      - pathType: Prefix
+        path: /api/
+        backend:
+          service:
+            name: prod-iow-pocketbase-service
+            port:
+              number: 8090        
+
+  tls:
+  - hosts: 
+    - iow.oci1.jpto.dev
+    secretName: iow-jpto-tls-production
