@@ -46,14 +46,14 @@ metadata:
     hajimari.io/group: "Production"
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: letsencrypt-production-nginx
-    nginx.ingress.kubernetes.io/rewrite-target: "/"
+    nginx.ingress.kubernetes.io/rewrite-target: "/$2"
 spec:
   rules:
   - host: "iow.oci1.jpto.dev"
     http:
       paths:
       - pathType: Prefix
-        path: /ht-h2s-h2/
+        path: /ht-h2s-h2/(/|$)(.*)
         backend:
           service:
             name: prod-iow-api-corr-ht-h2s-h2-service
