@@ -13,9 +13,9 @@ spec:
 
   # Source of the application manifests
   source:
-    repoURL: https://github.com/jpconstantineau/rpi-gitops.git
+    repoURL: https://github.com/jpconstantineau/oci-gitops.git
     targetRevision: HEAD
-    path: ./env-list
+    path: ./bootstrap
    
     # directory
     directory:
