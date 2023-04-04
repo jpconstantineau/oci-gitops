@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: crd-application-set
+  name: ingress-application-set
   namespace: argocd
 spec:
   generators:
