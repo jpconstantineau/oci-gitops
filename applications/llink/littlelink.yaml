@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-llink
+  namespace: llink
+  labels:
+    app: dev-llink
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dev-llink
+  template:
+    metadata:
+      labels:
+        app: dev-llink
+    spec:
+      containers:
+      - name: littlelink-server
+        image: ghcr.io/techno-tim/littlelink-server:latest
+        env:
+        - name: META_TITLE
+          value: 'Pierre Constantineau'
+        - name: META_DESCRIPTION
+          value: 'Links for Dr J. Pierre Constantineau'
+        - name: META_AUTHOR
+          value: 'Pierre Constantineau'
+        - name: META_KEYWORDS
+          value: 'HomeLab, Keyboards, Arduino, Software, Hardware, Engineering'   
+        - name: LANG
+          value: 'en'
+        - name: META_INDEX_STATUS
+          value: 'noindex'  
+        - name: THEME
+          value: 'Dark'  
+        - name: NAME
+          value: 'Pierre Constantineau PhD'  
+        - name: AVATAR_URL
+          value: 'https://avatars.githubusercontent.com/u/1149816?v=4'  
+        - name: BIO
+          value: 'Software Product Manager | Software Development Manager | Keyboard Hardware/Firmware | Arduino | CircuitPython | Content Creator on YouTube | Outdoor Enthusiast'  
+        - name: AVATAR_URL
+          value: 'https://avatars.githubusercontent.com/u/1149816?v=4'  
+        - name: GITHUB
+          value: 'https://github.com/jpconstantineau'
+        - name: LINKED_IN
+          value: 'https://www.linkedin.com/in/pierre-constantineau-ab81394/'  
+        - name: YOUTUBE
+          value: 'https://www.youtube.com/@BlueMicroWirelessKeyboards'
+        - name: DOCKERHUB
+          value: 'https://hub.docker.com/repositories/jpconstantineau'
+        - name: STRAVA
+          value: 'https://www.strava.com/athletes/17455724'  
+        - name: FOOTER
+          value: 'Pierre Constantineau © 2023'        
+        - name: CUSTOM_BUTTON_TEXT
+          value: "Tindie, Credly, Arduino, CircuitPython, ResearchGate"  
+        - name: CUSTOM_BUTTON_URL
+          value: "https://www.tindie.com/stores/jpconstantineau/,https://www.credly.com/users/pierre-constantineau/badges,https://www.arduinolibraries.info/authors/jpconstantineau,https://circuitpython.org/downloads?q=jpconstantineau,https://www.researchgate.net/profile/J-Constantineau"  
+        - name: CUSTOM_BUTTON_COLOR
+          value: "#17aeb9,#ff6b00,#008184,#652f8f,#40BA9B"  
+        - name: CUSTOM_BUTTON_TEXT_COLOR
+          value: "#ffffff,#ffffff,#ffffff,#ffffff,#ffffff"  
+        - name: CUSTOM_BUTTON_ALT_TEXT
+          value: "I Sell on Tindie,My Badges,My Arduino Libraries,My CircuitPython Boards, Published Papers"  
+        - name: CUSTOM_BUTTON_NAME
+          value: "TINDIE, CREDLY, ARDUINO, CIRCUITPYTHON, RESEARCHGATE"  
+        - name: CUSTOM_BUTTON_ICON
+          value: 'fas fa-keyboard,fas fa-certificate,fas fa-keyboard,fas fa-keyboard,fas fa-book'
+        - name: BUTTON_ORDER
+          value: LINKED_IN,CREDLY,RESEARCHGATE,GITHUB,DOCKERHUB,ARDUINO,CIRCUITPYTHON,YOUTUBE,TINDIE,STRAVA
+        - name: FAVICON_URL
+          value: 'https://avatars.githubusercontent.com/u/1149816?v=3'
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dev-llink-service
+  namespace: llink
+spec:
+  selector:
+    app: dev-llink
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dev-llink-ingress
+  namespace: llink
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt-production-nginx
+spec:
+  rules:
+  - host: "pierre.jpconstantineau.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: dev-llink-service
+            port:
+              number: 80
+  tls:
+  - hosts: 
+    - pierre.jpconstantineau.com
+    secretName: dev-llink-jpconstantineau-tls-production              
