@@ -54,21 +54,21 @@ spec:
         - name: FOOTER
           value: 'Pierre Constantineau © 2023'        
         - name: CUSTOM_BUTTON_TEXT
-          value: "Tindie, Credly, Arduino, CircuitPython, ResearchGate"  
+          value: "Tindie, Credly, Arduino, CircuitPython, ResearchGate, TinyGo"  
         - name: CUSTOM_BUTTON_URL
-          value: "https://www.tindie.com/stores/jpconstantineau/,https://www.credly.com/users/pierre-constantineau/badges,https://www.arduinolibraries.info/authors/jpconstantineau,https://circuitpython.org/downloads?q=jpconstantineau,https://www.researchgate.net/profile/J-Constantineau"  
+          value: "https://www.tindie.com/stores/jpconstantineau/,https://www.credly.com/users/pierre-constantineau/badges,https://www.arduinolibraries.info/authors/jpconstantineau,https://circuitpython.org/downloads?q=jpconstantineau,https://www.researchgate.net/profile/J-Constantineau,https://github.com/tinygo-org/tinygo/issues?q=author%3Ajpconstantineau+"  
         - name: CUSTOM_BUTTON_COLOR
-          value: "#17aeb9,#ff6b00,#008184,#652f8f,#40BA9B"  
+          value: "#17aeb9,#ff6b00,#008184,#652f8f,#40BA9B,#79D4FD"  
         - name: CUSTOM_BUTTON_TEXT_COLOR
-          value: "#ffffff,#ffffff,#ffffff,#ffffff,#ffffff"  
+          value: "#ffffff,#ffffff,#ffffff,#ffffff,#ffffff,#ffffff"  
         - name: CUSTOM_BUTTON_ALT_TEXT
-          value: "I Sell on Tindie,My Badges,My Arduino Libraries,My CircuitPython Boards, Published Papers"  
+          value: "I Sell on Tindie,My Badges,My Arduino Libraries,My CircuitPython Boards, Published Papers, My Contributions to TinyGo"  
         - name: CUSTOM_BUTTON_NAME
-          value: "TINDIE, CREDLY, ARDUINO, CIRCUITPYTHON, RESEARCHGATE"  
+          value: "TINDIE, CREDLY, ARDUINO, CIRCUITPYTHON, RESEARCHGATE, TINYGO"  
         - name: CUSTOM_BUTTON_ICON
-          value: 'fas fa-keyboard,fas fa-certificate,fas fa-keyboard,fas fa-keyboard,fas fa-book'
+          value: 'fas fa-keyboard,fas fa-certificate,fas fa-keyboard,fas fa-keyboard,fas fa-book,fas fa-keyboard'
         - name: BUTTON_ORDER
-          value: LINKED_IN,CREDLY,RESEARCHGATE,GITHUB,DOCKERHUB,ARDUINO,CIRCUITPYTHON,YOUTUBE,TINDIE,STRAVA
+          value: LINKED_IN,CREDLY,RESEARCHGATE,GITHUB,DOCKERHUB,ARDUINO,CIRCUITPYTHON,TINYGO,YOUTUBE,TINDIE,STRAVA
         - name: FAVICON_URL
           value: 'https://avatars.githubusercontent.com/u/1149816?v=3'
         ports:
